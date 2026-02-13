@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>PIN Access</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family: monospace;
+}
+
+body{
+    background:black;
+    overflow:hidden;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+/* MATRIX CANVAS */
+canvas{
+    position:fixed;
+    top:0;
+    left:0;
+    z-index:-1;
+}
+
+/* BOX */
+.box{
+    border:2px solid red;
+    padding:40px;
+    text-align:center;
+    background:rgba(0,0,0,0.8);
+}
+
+h2{
+    color:red;
+    margin-bottom:20px;
+}
+
+input{
+    width:200px;
+    padding:10px;
+    text-align:center;
+    font-size:18px;
+    background:black;
+    border:2px solid red;
+    color:#00ff00;
+    outline:none;
+    letter-spacing:4px;
+}
+
+button{
+    margin-top:20px;
+    padding:10px 20px;
+    background:red;
+    border:none;
+    color:white;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#990000;
+}
+
+.msg{
+    margin-top:15px;
+    color:#00ff00;
+}
+</style>
+</head>
+<body>
+
+<canvas id="matrix"></canvas>
+
+<div class="box">
+    <h2>MASUKKAN KODE ADMIN</h2>
+    <input type="password" id="pin" maxlength="10" placeholder="**********">
+    <br>
+    <button onclick="checkPin()">ENTER KEY</button>
+<a href="https://t.me/NazNotDev"><button>Dapatkan pin acces</button></a>
+<p>buy Rp: 10 k</p>
+    <div class="msg" id="msg"></div>
+</div>
+
+<script>
+// CEK PIN
+function checkPin(){
+    const pin = document.getElementById("pin").value;
+    const msg = document.getElementById("msg");
+
+    if(pin.length !== 10){
+        msg.innerText = "PIN harus 10 digit!";
+        msg.style.color = "red";
+        return;
+    }
+
+    if(pin === "6555363279"){
+        msg.innerText = "PIN BENAR, SERVER BERMASALAH (COBA LAGI NANTI) ";
+        msg.style.color = "#00ff00";
+    }else{
+        msg.innerText = "PIN SALAH!";
+        msg.style.color = "red";
+    }
+}
+
+// MATRIX EFFECT
+const canvas = document.getElementById("matrix");
+const ctx = canvas.getContext("2d");
+
+canvas.height = window.innerHeight;
+canvas.width = window.innerWidth;
+
+const letters = "0123456789";
+const fontSize = 12;
+const columns = canvas.width / fontSize;
+const drops = [];
+
+for(let i=0; i<columns; i++){
+    drops[i] = 1;
+}
+
+function draw(){
+    ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    ctx.fillStyle = "#00ff00";
+    ctx.font = fontSize + "px monospace";
+
+    for(let i=0; i<drops.length; i++){
+        const text = letters.charAt(Math.floor(Math.random()*letters.length));
+        ctx.fillText(text, i*fontSize, drops[i]*fontSize);
+
+        if(drops[i]*fontSize > canvas.height && Math.random() > 0.975){
+            drops[i] = 0;
+        }
+        drops[i]++;
+    }
+}
+
+setInterval(draw, 35);
+</script>
+
+</body>
+</html>
